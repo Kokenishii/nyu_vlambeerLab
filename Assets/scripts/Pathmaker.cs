@@ -10,6 +10,16 @@ using UnityEngine;
 // put this script on a Sphere... it will move around, and drop a path of floor tiles behind it
 
 public class Pathmaker : MonoBehaviour {
+    int counter = 0;
+    public List<Transform> floorPrefab = new List<Transform>();
+    public Transform pathmakerSpherePrefab;
+    public float maxTiles;
+    public float rotateChance;
+    public float spawnChance;
+    public float spawnChanceMax;
+    public float expectedNum;
+    public static int totalCount;
+    public int totalMax;
 
 // STEP 2: ============================================================================================
 // translate the pseudocode below
@@ -18,9 +28,47 @@ public class Pathmaker : MonoBehaviour {
 //	Declare a private integer called counter that starts at 0; 		// counter var will track how many floor tiles I've instantiated
 //	Declare a public Transform called floorPrefab, assign the prefab in inspector;
 //	Declare a public Transform called pathmakerSpherePrefab, assign the prefab in inspector; 		// you'll have to make a "pathmakerSphere" prefab later
-
+void Start()
+    {
+        //  expectedNum = spawnChance*maxTiles
+      // maxTiles = Random.Range(10, 50);
+        //spawnChance = Random.Range(0.2f, 0.4f);
+    }
 
 	void Update () {
+        print(totalCount);
+        if(counter < maxTiles && totalCount<=totalMax)
+        {
+            float rdnNum = Random.Range(0f, 1f);
+            if(rdnNum<rotateChance/2)
+            {
+                transform.Rotate(0, 90f, 0);
+            }
+            else
+            {
+                if(rdnNum<rotateChance)
+                {
+                    transform.Rotate(0, -90f, 0);
+                }
+                else
+                {
+                    if(rdnNum>1-spawnChance&&rdnNum<1f)
+                    {
+                        Instantiate(pathmakerSpherePrefab,transform.position,Quaternion.Euler(0,0,0));
+                    }
+                }
+            }
+            int prefabNum =Random.Range(0, 3);
+            Instantiate(floorPrefab[prefabNum], transform.position, Quaternion.Euler(0, 0, 0));
+            totalCount++;
+            counter++;
+            transform.position += 5f * transform.forward;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
 //		If counter is less than 50, then:
 //		Generate a random number from 0.0f to 1.0f;
 //		If random number is less than 0.25f, then rotate myself 90 degrees;
