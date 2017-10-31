@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // MAZE PROC GEN LAB
 // all students: complete steps 1-6, as listed in this file
@@ -36,6 +37,13 @@ void Start()
     }
 
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            totalMax = 0;
+
+            SceneManager.LoadScene(0);
+            
+        }
         print(totalCount);
         if(counter < maxTiles && totalCount<=totalMax)
         {
